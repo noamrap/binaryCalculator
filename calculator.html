@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decimal to Signed Binary Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+
+        pre {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Decimal to Signed Binary Converter</h1>
+        <label for="decimal">Enter decimal number:</label>
+        <input type="number" id="decimal">
+        <label for="size">Enter size:</label>
+        <input type="number" id="size">
+        <button onclick="convert()">Convert</button>
+        <pre id="result"></pre>
+    </div>
+
+    <script>
+        function decimalToBinary(dec, size) {
+            let binary = (dec >>> 0).toString(2); // Using >>> to ensure unsigned right shift
+            let paddedBinary = binary.padStart(size, '0');
+            return paddedBinary;
+        }
+
+        function decimalToSignedRepresentation(dec, size) {
+            let binary = decimalToBinary(dec, size);
+            let result = "Binary representation: " + binary + "\n";
+
+            binary = binary.replace(/0/g, 'B').replace(/1/g, '0').replace(/B/g, '1');
+
+            let decimalNum = parseInt(binary, 2);
+            decimalNum = decimalNum + 1;
+
+            let signedBinary = decimalToBinary(decimalNum, size);
+            result += "Binary Signed representation: " + signedBinary;
+
+            return result;
+        }
+
+        function convert() {
+            const dec = parseInt(document.getElementById("decimal").value);
+            const size = parseInt(document.getElementById("size").value);
+            let result = "";
+
+            if (!isNaN(dec) && !isNaN(size)) {
+                if (dec > 0) {
+                    result = decimalToSignedRepresentation(dec, size);
+                } else if (dec === 0) {
+                    result = "Binary representation: " + decimalToBinary(0, size);
+                } else {
+                    result = "Binary representation: " + decimalToBinary(Math.abs(dec), size);
+                }
+            } else {
+                result = "Please enter valid decimal number and size.";
+            }
+
+            document.getElementById("result").textContent = result;
+        }
+    </script>
+</body>
+</html>
